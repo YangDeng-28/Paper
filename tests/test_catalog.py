@@ -15,13 +15,13 @@ from extract import guess_kind
 class CatalogTests(unittest.TestCase):
     def setUp(self):
         self.scope = common.read('scope.json')
-        self.papers = common.read('papers.json')
+        self.papers = [{'id':'doi:10.1/fixture','doi':'10.1/fixture','title':'Test research paper','authors':['Test Author'],'venue':'ICSE','year':2025,'source_url':'https://example.org/paper','verification':'research_track_verified','tags':[]}]
 
     def figure(self):
         return {'id':'test','paper_id':self.papers[0]['id'],'kind':'framework','status':'published','reviewed':True,'publication_verified':True,'caption':'Pipeline','number':'Figure 1','version':'v1','note':'Clear stages','attribution':'Example author','license':'CC-BY-4.0','source_url':'https://example.org/paper','rights_url':'https://example.org/license','image':'assets/figures/example.png'}
 
     def test_real_catalog_valid(self):
-        common.validate(self.papers,common.read('figures.json'),self.scope)
+        common.validate(common.read('papers.json'),common.read('figures.json'),self.scope)
 
     def test_scope_has_all_sources_and_years(self):
         self.assertEqual(len(self.scope['venues']),14)

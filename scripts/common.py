@@ -4,14 +4,19 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
+import database
 
 ROOT = Path(__file__).resolve().parents[1]
 
 def read(name, default=None):
+    if name in database.NAMES:
+        return database.read(ROOT,name,default)
     path = ROOT / 'data' / name
     return json.loads(path.read_text('utf-8')) if path.exists() else default
 
 def write(name, value):
+    if name in database.NAMES:
+        return database.write(ROOT,name,value)
     path = ROOT / 'data' / name
     path.parent.mkdir(parents=True, exist_ok=True)
     temp = path.with_suffix('.tmp')
@@ -32,6 +37,7 @@ def https(url):
 
 def validate(papers, figures, scope):
     allowed = {v['id'] for v in scope['venues']}
+    by_id = {p['id']:p for p in papers}
     ids = set()
     for paper in papers:
         assert paper['id'] not in ids, 'duplicate paper id: ' + paper['id']
@@ -46,7 +52,7 @@ def validate(papers, figures, scope):
         assert figure['paper_id'] in ids, 'orphan figure'
         assert figure['kind'] in ['framework', 'experiment'], 'unknown figure kind'
         if figure.get('status') == 'published':
-            paper = next(p for p in papers if p['id'] == figure['paper_id'])
+            paper = by_id[figure['paper_id']]
             assert paper.get('verification') == 'research_track_verified', 'paper publication eligibility needs verification'
             for field in ['caption', 'number', 'version', 'attribution', 'license']:
                 assert figure.get(field), 'missing figure field: ' + field

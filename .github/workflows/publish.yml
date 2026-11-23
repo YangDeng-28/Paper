@@ -26,11 +26,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify catalog and pipeline
-        run: python -m unittest discover -s tests -v
-      - name: Install PDF extractor
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.collect)
+      - name: Install PDF and thumbnail tools
         run: python -m pip install -r requirements.txt
+      - name: Verify database and bounded payloads
+        run: python -m unittest discover -s tests -v
       - name: Discover papers
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.collect)
         run: python scripts/collect.py
@@ -42,7 +41,6 @@ jobs:
       - name: Validate refreshed catalog
         run: python -m unittest discover -s tests -v
       - name: Save collection progress
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.collect)
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'

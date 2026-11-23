@@ -2,8 +2,10 @@
 # Run in your normal terminal, where GitHub SSH is already authenticated.
 set -euo pipefail
 cd -- "$(dirname -- "$0")"
-python3 -m unittest discover -s tests -v
-python3 scripts/build.py
+atlas_python=python3
+if [ -x .venv/bin/python ]; then atlas_python=.venv/bin/python; fi
+"$atlas_python" -m unittest discover -s tests -v
+"$atlas_python" scripts/build.py
 git diff --check
 git add README.md requirements.txt .gitignore .github data scripts site tests DEPLOY.sh
 if ! git diff --cached --quiet; then

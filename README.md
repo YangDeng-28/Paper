@@ -1,100 +1,112 @@
 # SE Figure Atlas · 软件工程论文图谱
 
-公开、可部署的软件工程论文图表参考库。首批收录范围为 2025–2026 年发表、属于 CCF「软件工程 / 系统软件 / 程序设计语言」A 类来源的正式研究论文。框架图与实验图并重。
+公开的软件工程论文图表参考库，收录 2025–2026 年 CCF「软件工程 / 系统软件 / 程序设计语言」A 类来源的论文元数据、框架图与实验图。
 
-## 产品范围
+网站：https://yangdeng-28.github.io/Paper/
 
-- 来源：ICSE、FSE、ASE、ISSTA、FM、PLDI、POPL、OOPSLA、SOSP、OSDI；TOSEM、TSE、TOPLAS、TSC。
-- 分级以当前 CCF 目录为口径，不声称是论文发表当年的历史评级。来源：https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/
-- 年份按正式发表年份；预印本年份另存。Journal-first 展示不重复算作会议新论文。
-- 自动发现论文、定时增量更新、元数据去重；可获取且适合公开展示的图表进入提取和人工审核流程。
-- 公开图库支持组合筛选、全文关键词检索、放大、原文追溯、分享直达链接和本地收藏。
-- “精选”由人工审核决定，依据布局、可读性、配色及表达效果，必须填写参考理由；自动提取只产生候选。
-- 无法下载或未确认可公开展示的图片保留原文链接，不伪造缩略图。
+仓库：`YangDeng-28/Paper`
 
-## 部署目标
+## 数据库与访问速度
 
-目标仓库：`YangDeng-28/Paper`（`git@github.com:YangDeng-28/Paper.git`）。静态网页使用 GitHub Pages，采集和生成使用 GitHub Actions。SSH 推送和 Pages 启用是不同操作；SSH 只负责 Git 传输。
+`data/catalog.sqlite3` 是唯一主数据库。论文标题、作者、DOI、会议期刊、年份、来源链接、图表信息、审核状态和采集进度均存入 SQLite。数据库使用事务、DOI 唯一索引、来源年份索引和图表外键约束；旧 JSON 仅作为首次迁移输入，迁移后不再读取。
 
-## 数据边界
+网站使用 **数据库 → 构建静态文件 → GitHub Pages** 的发布方式：
 
-首版是逐步建设的图表库，不声称已经覆盖全部来源。网站显示实际收录数量、采集状态和更新日期。2026 年缺失条目不能据此判定论文未发表。
+- 浏览网站不连接数据库，不依赖在线 Python 服务。
+- 首页只加载最多 24 张图表及其关联论文，不下载全库；论文数量增加不会使首页携带全部元数据。
+- 搜索索引在搜索、筛选、浏览论文或收藏时才加载，完整记录按每 100 条一个文件分片加载。
+- 列表使用 WebP 缩略图与图片懒加载，打开详情才获取原尺寸图。
+- SQLite、原始 PDF 和未审核候选图不会进入 Pages 发布包。数据库本身在公开 GitHub 仓库中可见。
 
-论文图片归原作者或权利人所有，代码许可不覆盖论文图片。每张已发布图表记录来源、作者、图号、图注、版本和展示依据，支持撤下。
+图片文件放在 `site/assets/figures/`，数据库保存关联和出处，不将图片二进制或 PDF 塞入数据库。可下载的原始 PDF 放在本地 `.cache/pdf/`，不提交到 GitHub。收藏仍保存在访问者自己的浏览器，可导出备份。
 
-## 当前首版
+## 当前数据与范围
 
-包含 3 篇核实出处的论文、4 张 RepairAgent 图表（1 张框架图、3 张实验图）。图片来自标注 CC BY 4.0 的 arXiv:2403.17134v2，网页明确展示预印本版本；正式发表年份为 ICSE 2025。它们经过来源核对，但不标为人工精选。2026 年目前只有论文索引，尚无图表。14 个来源均已配置，不代表已完成全量收录。
+首轮已索引 **5,604 条论文元数据**，发布 **8 张图表**：RepairAgent（ICSE 2025）4 张、Agentless（FSE 2025）2 张、Reachability Gap（ICSE 2026）2 张。包括 3 张框架/流程图和 5 张实验图。图表已核对出处和公开版本；这些参考图尚未标为人工精选。自动提取的候选与公开图表分开存储。
+
+配置的 14 个来源：ICSE、FSE、ASE、ISSTA、FM、PLDI、POPL、OOPSLA、SOSP、OSDI；TOSEM、TSE、TOPLAS、TSC。分级依据 [CCF 官方目录](https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/)，不是发表当年的历史评级。
+
+首轮使用 Crossref 官方索引和 USENIX 官网。DBLP 在当前采集环境返回人机验证，因此使用这些公开来源；不绕过访问限制。会议检索最多取每个年份的 1,000 条相关结果，再按来源筛选；期刊使用游标分页。元数据索引不等于全部属于正式研究论文，自动条目标记待核验；不会据此声称全量覆盖。FM 2025 当前没有匹配记录，不代表该年没有论文。2026 年缺失记录同样不能推断为未发表。
+
+年份优先按正式出版年份归档，预印本年份另存。Journal-first 展示不重复算作会议新论文。全文无法获取或公开展示依据不明时，仅保留论文来源，不伪造图表。
 
 来源证据：
+
 - RepairAgent 正式版本：https://software-lab.org/publications/icse2025_RepairAgent.pdf
-- RepairAgent 图片与许可：https://arxiv.org/html/2403.17134v2
-- Agentless FSE 2025：https://conf.researchr.org/details/fse-2025/fse-2025-research-papers/85/Demystifying-LLM-based-Software-Engineering-Agents
-- Reachability Gap ICSE 2026：https://mpi-softsec.github.io/papers/ICSE26-reachabilityGap.pdf
+- RepairAgent 图表版本与许可：https://arxiv.org/html/2403.17134v2
+- Agentless 作者公开正式版本（第 1 页 CC BY 4.0）：https://lingming.cs.illinois.edu/publications/fse2025.pdf
+- Reachability Gap 作者公开正式版本（第 1 页 CC BY 4.0）：https://mpi-softsec.github.io/papers/ICSE26-reachabilityGap.pdf
+
+论文图片归原作者或权利人所有，代码许可不覆盖论文图片。每张公开图表保存作者、图号、图注、来源版本、展示依据和处理说明。
 
 ## 本地运行
 
-前端无需 Node.js，无第三方 CDN、字体或前端依赖。Python 3.10+ 可直接构建。
+Python 3.10+；前端无需 Node.js 或第三方 CDN。
 
 ```bash
-python3 -m unittest discover -s tests -v
-python3 scripts/build.py
-python3 -m http.server 8000 --directory dist --bind 127.0.0.1
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python scripts/database.py
+.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python scripts/build.py
+.venv/bin/python -m http.server 8000 --directory dist --bind 127.0.0.1
 ```
 
-打开 `http://127.0.0.1:8000`。也可直接打开 `dist/index.html`，搜索与收藏可运行；文件协议下收藏和剪贴板行为取决于浏览器。
+访问 `http://127.0.0.1:8000`。请通过 HTTP 服务预览；直接双击 HTML 的 `file://` 模式无法可靠加载分页文件。
 
-## 发布到 GitHub
+## 发布与自动更新
 
-在普通终端运行 `bash DEPLOY.sh`。脚本验证数据、构建、提交并推送到现有 `origin`，不会强制推送或修改远程地址。
+运行 `bash DEPLOY.sh` 验证、构建、提交并推送现有 `origin`；不会强制推送或修改远程地址。仓库 Settings → Pages → Source 使用 **GitHub Actions**。
 
-首次在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。工作流部署成功后，预期网址为 `https://yangdeng-28.github.io/Paper/`；部署成功前不要把这个地址当作已上线链接。
+推送 main 时发布。每周一、周四北京时间 06:23 计划采集并更新（GitHub 调度可能延迟）；也可以在 Actions → Collect and publish figure atlas → Run workflow 勾选 `collect`。Actions 将更新后的数据库和图片提交到仓库，随后生成静态网站。访问者持续读取已发布页面，采集任务不参与页面请求。
 
-工作流在推送 main 时构建并发布；每周一、周四北京时间 06:23 计划执行论文发现和候选提取（GitHub 调度可能延迟）。第一次希望立即采集时，在 Actions → Collect and publish figure atlas → Run workflow，保持 `collect` 勾选。定时任务仅更新索引与候选，不自动标记人工精选。
+自动更新需要 `contents: write`。如果分支保护禁止机器人推送，应配置 PR 工作流，不会强推绕过保护。所有数据库写入工具应顺序运行；SQLite 事务保护单次写入，但多个独立采集进程不应同时读改写同一目录。
 
-自动更新需要 Actions 的 `contents: write` 权限。若 main 分支受到保护而不允许机器人提交，采集任务会在推送时失败，须改成 PR 工作流或调整该仓库的自动更新策略；不会强推绕过保护。
-
-## 采集与审核
+## 采集与核验
 
 ```bash
-# 按配置发现论文，支持 --venue ICSE --year 2025
-python3 scripts/collect.py
-# PDF 提取的唯一依赖，建议先建虚拟环境
-python3 -m pip install -r requirements.txt
-# 每次最多解析 20 篇；失败来源至少 7 天后自动重试
-python3 scripts/harvest.py --limit 20
-# 将已发布、已核验的外部图片缓存进仓库
-python3 scripts/cache_assets.py
-# 本地审核页，不会进入 dist 发布包
-python3 scripts/preview_review.py
+# 支持 --venue ICSE --year 2025
+.venv/bin/python scripts/collect.py
+# 每次处理最多 20 篇；未尝试条目优先，失败至少 7 天后重试
+.venv/bin/python scripts/harvest.py --limit 20
+# 缓存已经核验并发布的外部图表
+.venv/bin/python scripts/cache_assets.py
+# 本地候选审核页，不进入公开网站
+.venv/bin/python scripts/preview_review.py
 ```
 
-打开 `.cache/review/index.html` 逐张核对。提取算法按图注和矢量/位图区域生成候选，不保证裁剪正确；扫描版 PDF、复杂跨栏、多图密集页面需要手工处理。原始 PDF 缓存在 `.cache/pdf/`，不提交到 GitHub。
+自动提取只生成 `candidate`，不会自动发布或变成人工精选。按图注和矢量/位图区域裁剪的算法可能误判，须逐张检查复杂跨栏、密集图表等情况。`ATLAS_DIRECT=1` 可在本地代理故障时让采集工具直接联网；默认尊重系统代理配置。
 
-手动导入 PDF：先在 `data/papers.json` 添加来源、正式年份、作者和 PDF URL，再执行：
+使用 JSON 文件作为数据库的维护接口：
 
 ```bash
-python3 scripts/extract.py --paper '论文ID' --pdf /path/to/paper.pdf
-python3 scripts/review.py list
-python3 scripts/review.py crop 图表ID --pdf /path/to/paper.pdf --bbox 40 80 550 320
-python3 scripts/review.py approve 图表ID --kind framework --chart-type '模块架构图' --note '用三层布局区分输入、处理和输出，模块边界清晰。' --license CC-BY-4.0 --rights-url https://example.org/verified-license
-python3 scripts/build.py
+# 导出备份或编辑参考；不改变数据库
+.venv/bin/python scripts/catalog.py export papers /tmp/papers-export.json
+# 输入为 JSON 数组，按 id 新增或更新指定字段，未提供的记录不会删除
+.venv/bin/python scripts/catalog.py upsert papers /path/to/paper-updates.json
+.venv/bin/python scripts/catalog.py upsert figures /path/to/figure-updates.json
 ```
 
-`--bbox` 使用 PDF 点坐标。批准前核实论文属于正式研究论文，把论文的 `verification` 设为 `research_track_verified` 并保留核实来源。`approve` 表示你已检查裁剪、授权与图注，并填写精选理由。`reject 图表ID` 撤下图片，重建并推送后公开网站才会生效。
+手动补充论文时填写正式年份、作者、来源、`pdf_url`、许可和展示依据；确认正式研究论文资格后设置 `verification: research_track_verified`，保留核验来源。然后提取与审核：
 
-可在 `data/figures.json` 直接添加已获取的图片。必要字段通过 `scripts/common.py` 校验；`publication_verified` 表示已核对来源和图片，`reviewed` 专门表示人工精选，两者分开。自动提取生成 `candidate`，不会进入公开网站。公开仓库中已提交的图片会保留 Git 历史，因此撤下历史文件需要另行处理。
+```bash
+.venv/bin/python scripts/extract.py --paper '论文ID' --pdf /path/to/paper.pdf
+.venv/bin/python scripts/review.py list
+.venv/bin/python scripts/review.py crop 图表ID --pdf /path/to/paper.pdf --bbox 40 80 550 320
+.venv/bin/python scripts/review.py approve 图表ID --kind framework --chart-type '模块架构图' --note '三层布局区分输入、处理和输出，模块边界清晰。' --license CC-BY-4.0 --rights-url https://example.org/verified-license
+.venv/bin/python scripts/build.py
+```
 
-## 目录与运行边界
+`--bbox` 使用 PDF 点坐标。`publication_verified` 表示核对出处和图片；`reviewed` 表示人工精选，必须填写参考理由。`approve` 表示维护者已核验裁剪、图注、展示依据和视觉效果。`reject 图表ID` 撤下图片，重建发布后公开网站才更新；公开仓库历史中的文件仍存在。
 
-- `site/`：网页、样式、交互和图片。
-- `data/scope.json`：来源和年份配置。
-- `data/papers.json`：论文索引，自动发现默认待核验。
-- `data/figures.json`：图表元数据、状态、来源与精选理由。
-- `data/status.json` / `harvest.json`：查询与提取进度、失败原因。
-- `scripts/`：发现、下载、提取、审核、构建工具。
-- `.github/workflows/publish.yml`：定时更新和 Pages 发布。
+## 目录
 
-元数据按 DOI 和 DBLP key 去重，自动更新保留人工标签。Crossref 只采用许可版本与 PDF 版本匹配的下载链接；缺失开放全文时等待人工补充作者版本。公共网页不提供数据库写入入口，维护通过仓库完成。收藏只保存在当前浏览器，可导出 JSON；不跨设备同步。
+- `data/catalog.sqlite3`：论文、图表、采集与提取状态的主数据库。
+- `data/scope.json`：收录来源和年份配置。
+- `site/`：静态前端及图表资源。
+- `scripts/`：采集、数据库维护、提取、核验与构建。
+- `tests/`：数据库事务、去重、来源筛选、发布边界和首页数据体积测试。
+- `.github/workflows/publish.yml`：定时更新与 Pages 发布。
+- `dist/`：构建产物，不提交 Git。
 
-搜索、分类、分享和收藏在浏览器本地运行。搜索与卡片采用分批显示；当图表规模增长至数万张时，建议将目录拆分为分页索引，图片迁移至对象存储。
+规模测试将论文从 11 条增加到 5,001 条，首页目录仅增加 4 字节（统计数字变化）；全量数据放在独立分片。后续达到数万或更多条时，搜索索引本身也应拆分或引入搜索服务。当前方案减少首屏负载，但实际访问时间仍受访客网络和 GitHub Pages 服务影响。

@@ -115,4 +115,5 @@ def main():
     print(json.dumps({'papers': len(papers), 'failed_queries': len(status['errors'])}))
 
 if __name__ == '__main__':
-    main()
+    from collect_sources import main as collect_sources
+    collect_sources()

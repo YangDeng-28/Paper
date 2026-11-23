@@ -9,7 +9,24 @@ import re
 from pathlib import Path
 from common import ROOT, read, write, now
 
-CAPTION = re.compile(r'^(?:Fig(?:ure)?\.?)[\s\u00a0]*(\d+)\s*[:.\s]', re.I)
+CAPTION = re.compile(r'^(?:Fig(?:ure)?\.?)[\s\u00a0]*(\d+)\s*[:.]', re.I)
+
+def caption_blocks(page):
+    """Keep caption lines; do not include following prose merged into the PDF block."""
+    for block in page.get_text('dict')['blocks']:
+        lines=block.get('lines',[])
+        if not lines:continue
+        first=''.join(s['text'] for s in lines[0]['spans']).strip()
+        if not CAPTION.match(first):continue
+        sizes=[s['size'] for s in lines[0]['spans'] if s['text'].strip()]
+        if not sizes:continue
+        size=max(sizes);kept=[lines[0]];texts=[first]
+        for line in lines[1:]:
+            spans=[s for s in line['spans'] if s['text'].strip()]
+            if not spans or abs(max(s['size'] for s in spans)-size)>.25:break
+            if line['bbox'][1]-kept[-1]['bbox'][3]>size:break
+            kept.append(line);texts.append(''.join(s['text'] for s in spans))
+        yield (min(l['bbox'][0] for l in kept),min(l['bbox'][1] for l in kept),max(l['bbox'][2] for l in kept),max(l['bbox'][3] for l in kept),' '.join(texts))
 
 def guess_kind(caption):
     text = caption.lower()
@@ -28,7 +45,7 @@ def extract(paper, pdf_path, destination=None):
     added = []
     with fitz.open(pdf_path) as doc:
         for page_no, page in enumerate(doc):
-            blocks = sorted(page.get_text('blocks'), key=lambda b: (b[1], b[0]))
+            blocks = sorted(caption_blocks(page), key=lambda b: (b[1], b[0]))
             for b in blocks:
                 text = ' '.join(b[4].split())
                 match = CAPTION.match(text)
@@ -84,7 +101,7 @@ def extract(paper, pdf_path, destination=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--paper', required=True, help='paper id in data/papers.json')
+    parser.add_argument('--paper', required=True, help='paper id in data/catalog.sqlite3')
     parser.add_argument('--pdf', required=True, type=Path)
     args = parser.parse_args()
     paper = next((p for p in read('papers.json') if p['id'] == args.paper), None)

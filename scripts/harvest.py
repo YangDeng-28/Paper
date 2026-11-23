@@ -8,9 +8,12 @@ import hashlib
 import ipaddress
 import json
 import socket
+import os
+import time
 from datetime import datetime, timedelta, timezone
 from urllib.parse import urlparse, quote
-from urllib.request import Request, build_opener, HTTPRedirectHandler
+from urllib.request import Request, build_opener, HTTPRedirectHandler, ProxyHandler
+from urllib.error import URLError, HTTPError
 from common import ROOT, read, write, now, https
 from extract import extract
 
@@ -35,10 +38,13 @@ class Redirects(HTTPRedirectHandler):
         public_url(newurl)
         return super().redirect_request(req,fp,code,msg,headers,newurl)
 
-def download(url, max_bytes=30_000_000):
+def download_once(url, max_bytes=30_000_000):
     public_url(url)
     req = Request(url,headers={'User-Agent':'SE-Figure-Atlas/0.1 (research figure catalog)'})
-    with build_opener(Redirects()).open(req,timeout=40) as response:
+    handlers=[Redirects()]
+    if os.environ.get('ATLAS_DIRECT')=='1':handlers.append(ProxyHandler({}))
+    with build_opener(*handlers).open(req,timeout=40) as response:
+        if response.status!=200:raise ValueError(f'HTTP {response.status}: source did not return content')
         chunks, size = [], 0
         while True:
             chunk = response.read(65536)
@@ -50,14 +56,25 @@ def download(url, max_bytes=30_000_000):
             chunks.append(chunk)
         return b''.join(chunks)
 
+def download(url,max_bytes=30_000_000):
+    for attempt in range(3):
+        try:return download_once(url,max_bytes)
+        except HTTPError as exc:
+            if exc.code not in (429,500,502,503,504) or attempt==2:raise
+            retry=exc.headers.get('Retry-After','')
+            time.sleep(float(retry) if retry.isdigit() else 5*(attempt+1))
+        except (URLError,TimeoutError):
+            if attempt==2:raise
+            time.sleep(2*(attempt+1))
+
 def crossref_pdf(paper):
     if not paper.get('doi'):
         return False
     url = 'https://api.crossref.org/works/' + quote(paper['doi'],safe='')
-    record = json.loads(download(url,2_000_000))['message']
+    record = {'license':paper['crossref_license'],'link':paper.get('crossref_links',[])} if 'crossref_license' in paper else json.loads(download(url,2_000_000))['message']
     licensed_versions = {}
     for license in record.get('license',[]):
-        normalized = license.get('URL','').replace('http://','https://').rstrip('/')
+        normalized = license.get('URL','').replace('http://','https://').rstrip('/').removesuffix('/legalcode').removesuffix('/deed.en')
         start = license.get('start',{}).get('timestamp',0)
         if normalized in LICENSES and start <= datetime.now(timezone.utc).timestamp() * 1000:
             licensed_versions[license.get('content-version','unspecified')] = LICENSES[normalized]
@@ -80,6 +97,8 @@ def main():
         parser.error('--limit must be positive')
     papers = read('papers.json')
     state = read('harvest.json',{})
+    # New papers must eventually advance past failed or unavailable sources.
+    papers.sort(key=lambda p:(bool(state.get(p['id'])),not bool(p.get('pdf_url') and p.get('license') in LICENSES.values()),state.get(p['id'],{}).get('attempt','')))
     cache = ROOT / '.cache' / 'pdf'
     cache.mkdir(parents=True,exist_ok=True)
     attempts = 0
