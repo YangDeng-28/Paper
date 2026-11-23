@@ -1,0 +1,22 @@
+{
+  "ranking_source": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/",
+  "ranking_checked": "2026-11-24",
+  "ranking_policy": "当前 CCF 目录；非历史发表年度评级",
+  "years": [2025, 2026],
+  "venues": [
+    {"id": "ICSE", "type": "conference", "core": true, "streams": ["conf/icse"]},
+    {"id": "FSE", "type": "conference", "core": true, "streams": ["conf/sigsoft", "journals/pacmse"], "issue": "FSE"},
+    {"id": "ASE", "type": "conference", "core": true, "streams": ["conf/kbse"]},
+    {"id": "ISSTA", "type": "conference", "core": true, "streams": ["conf/issta", "journals/pacmse"], "issue": "ISSTA"},
+    {"id": "FM", "type": "conference", "core": true, "streams": ["conf/fm"]},
+    {"id": "PLDI", "type": "conference", "core": false, "streams": ["conf/pldi", "journals/pacmpl"], "issue": "PLDI"},
+    {"id": "POPL", "type": "conference", "core": false, "streams": ["conf/popl", "journals/pacmpl"], "issue": "POPL"},
+    {"id": "OOPSLA", "type": "conference", "core": false, "streams": ["conf/oopsla", "journals/pacmpl"], "issue": "OOPSLA"},
+    {"id": "SOSP", "type": "conference", "core": false, "streams": ["conf/sosp"]},
+    {"id": "OSDI", "type": "conference", "core": false, "streams": ["conf/osdi"]},
+    {"id": "TOSEM", "type": "journal", "core": true, "streams": ["journals/tosem"]},
+    {"id": "TSE", "type": "journal", "core": true, "streams": ["journals/tse"]},
+    {"id": "TOPLAS", "type": "journal", "core": false, "streams": ["journals/toplas"]},
+    {"id": "TSC", "type": "journal", "core": false, "streams": ["journals/tsc"]}
+  ]
+}

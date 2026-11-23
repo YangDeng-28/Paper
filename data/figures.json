@@ -1,0 +1,102 @@
+[
+  {
+    "id": "repairagent-overview",
+    "paper_id": "doi:10.1109/icse55347.2025.00157",
+    "number": "Figure 1",
+    "kind": "framework",
+    "chart_type": "模块架构图",
+    "caption": "Overview of RepairAgent.",
+    "image": "https://arxiv.org/html/2403.17134v2/overview3.drawio.png",
+    "source_url": "https://arxiv.org/html/2403.17134v2",
+    "version": "arXiv:2403.17134v2 · 2024-10-28（对应 ICSE 2025 论文的预印本版本）",
+    "license": "CC-BY-4.0",
+    "rights_url": "https://arxiv.org/html/2403.17134v2",
+    "attribution": "Islem Bouzenia, Premkumar Devanbu, Michael Pradel. RepairAgent: An Autonomous, LLM-Based Agent for Program Repair. ICSE 2025; arXiv:2403.17134v2.",
+    "modifications": "引用 arXiv HTML 原始图片；未重绘。图 9 按原文子图分别展示。",
+    "status": "published",
+    "publication_verified": true,
+    "reviewed": false,
+    "note": "",
+    "tags": [
+      "程序修复",
+      "软件智能体"
+    ],
+    "added_at": "2026-11-24",
+    "review_note": "已核对论文、图号、图片链接与 CC BY 4.0 声明；尚未人工精选。"
+  },
+  {
+    "id": "repairagent-time",
+    "paper_id": "doi:10.1109/icse55347.2025.00157",
+    "number": "Figure 9(a)",
+    "kind": "experiment",
+    "chart_type": "小提琴图",
+    "caption": "Time.",
+    "image": "https://arxiv.org/html/2403.17134v2/figures/violin_plot_time.png",
+    "source_url": "https://arxiv.org/html/2403.17134v2",
+    "version": "arXiv:2403.17134v2 · 2024-10-28（对应 ICSE 2025 论文的预印本版本）",
+    "license": "CC-BY-4.0",
+    "rights_url": "https://arxiv.org/html/2403.17134v2",
+    "attribution": "Islem Bouzenia, Premkumar Devanbu, Michael Pradel. RepairAgent: An Autonomous, LLM-Based Agent for Program Repair. ICSE 2025; arXiv:2403.17134v2.",
+    "modifications": "引用 arXiv HTML 原始图片；未重绘。图 9 按原文子图分别展示。",
+    "status": "published",
+    "publication_verified": true,
+    "reviewed": false,
+    "note": "",
+    "tags": [
+      "程序修复",
+      "软件智能体"
+    ],
+    "added_at": "2026-11-24",
+    "review_note": "已核对论文、图号、图片链接与 CC BY 4.0 声明；尚未人工精选。"
+  },
+  {
+    "id": "repairagent-tokens",
+    "paper_id": "doi:10.1109/icse55347.2025.00157",
+    "number": "Figure 9(b)",
+    "kind": "experiment",
+    "chart_type": "小提琴图",
+    "caption": "Tokens/money consumption.",
+    "image": "https://arxiv.org/html/2403.17134v2/figures/violin_plot_tokens.png",
+    "source_url": "https://arxiv.org/html/2403.17134v2",
+    "version": "arXiv:2403.17134v2 · 2024-10-28（对应 ICSE 2025 论文的预印本版本）",
+    "license": "CC-BY-4.0",
+    "rights_url": "https://arxiv.org/html/2403.17134v2",
+    "attribution": "Islem Bouzenia, Premkumar Devanbu, Michael Pradel. RepairAgent: An Autonomous, LLM-Based Agent for Program Repair. ICSE 2025; arXiv:2403.17134v2.",
+    "modifications": "引用 arXiv HTML 原始图片；未重绘。图 9 按原文子图分别展示。",
+    "status": "published",
+    "publication_verified": true,
+    "reviewed": false,
+    "note": "",
+    "tags": [
+      "程序修复",
+      "软件智能体"
+    ],
+    "added_at": "2026-11-24",
+    "review_note": "已核对论文、图号、图片链接与 CC BY 4.0 声明；尚未人工精选。"
+  },
+  {
+    "id": "repairagent-overlap",
+    "paper_id": "doi:10.1109/icse55347.2025.00157",
+    "number": "Figure 6",
+    "kind": "experiment",
+    "chart_type": "韦恩图",
+    "caption": "Intersection of the set fixes with related work.",
+    "image": "https://arxiv.org/html/2403.17134v2/figures/venn_diagram.png",
+    "source_url": "https://arxiv.org/html/2403.17134v2",
+    "version": "arXiv:2403.17134v2 · 2024-10-28（对应 ICSE 2025 论文的预印本版本）",
+    "license": "CC-BY-4.0",
+    "rights_url": "https://arxiv.org/html/2403.17134v2",
+    "attribution": "Islem Bouzenia, Premkumar Devanbu, Michael Pradel. RepairAgent: An Autonomous, LLM-Based Agent for Program Repair. ICSE 2025; arXiv:2403.17134v2.",
+    "modifications": "引用 arXiv HTML 原始图片；未重绘。图 9 按原文子图分别展示。",
+    "status": "published",
+    "publication_verified": true,
+    "reviewed": false,
+    "note": "",
+    "tags": [
+      "程序修复",
+      "软件智能体"
+    ],
+    "added_at": "2026-11-24",
+    "review_note": "已核对论文、图号、图片链接与 CC BY 4.0 声明；尚未人工精选。"
+  }
+]

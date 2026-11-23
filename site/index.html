@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="软件工程论文图表参考库：浏览 2025–2026 年 CCF A 类来源的框架图与实验图，收藏设计灵感，追溯论文原文。">
+  <meta name="theme-color" content="#185a48">
+  <title>SE Figure Atlas · 软件工程论文图谱</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="catalog.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#results">跳到结果</a>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="SE Figure Atlas 首页"><span class="brand-icon" aria-hidden="true">◫</span><span>SE Figure Atlas<small>软件工程论文图谱</small></span></a>
+    <nav aria-label="主要导航"><button data-view="figures" class="nav-button active">图表探索</button><button data-view="papers" class="nav-button">论文索引</button><button data-view="saved" class="nav-button">我的收藏 <span id="saved-count">0</span></button><button data-view="about" class="nav-button">收录范围</button></nav>
+    <a class="repo-link" href="https://github.com/YangDeng-28/Paper" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </header>
+  <main>
+    <section class="hero">
+      <div><div class="eyebrow">SOFTWARE ENGINEERING · VISUAL LIBRARY</div><h1>让好的研究，<br>也成为好的<span>视觉参考。</span></h1><p>收集论文中的方法框架与实验图表。<br class="desktop">从布局、配色到信息表达，寻找下一张图的灵感。</p><div class="hero-tags"><span>CCF A 类来源</span><span>2025 — 2026</span><span>原文可追溯</span></div></div>
+      <div class="hero-art" aria-label="图库收录流程示意，非论文图片">
+        <div class="art-top"><span>从论文到参考</span><span>COLLECT / CURATE</span></div>
+        <div class="art-flow"><span>发现论文</span><i aria-hidden="true"></i><span>提取图表</span><i aria-hidden="true"></i><span class="art-accent">人工精选</span></div>
+        <div class="art-bottom"><div class="mini-chart" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><p>框架与实验，并重。<br><small>保留出处，记录值得参考的细节。</small></p></div>
+        <small class="art-label">收录流程示意 · 非论文图片</small>
+      </div>
+    </section>
+    <section class="statbar" aria-label="实际收录统计"><div><strong id="stat-figures">0</strong><span>已发布图表</span></div><div><strong id="stat-papers">0</strong><span>已索引论文</span></div><div><strong id="stat-venues">14</strong><span>配置收录来源</span></div><p id="update-status">正在读取目录</p></section>
+    <section class="workspace" id="explore">
+      <aside class="sidebar" aria-label="筛选条件">
+        <div class="sidebar-title"><h2>筛选</h2><button id="reset" class="text-button">重置</button></div>
+        <label class="field-label" for="year">发表年份</label><select id="year"><option value="">全部年份</option><option>2026</option><option>2025</option></select>
+        <label class="field-label" for="venue">会议 / 期刊</label><select id="venue"><option value="">全部来源</option></select>
+        <label class="check"><input type="checkbox" id="core">仅软件工程核心来源</label>
+        <label class="field-label" for="chart">图形形式</label><select id="chart"><option value="">全部形式</option></select>
+        <label class="check"><input type="checkbox" id="curated">仅人工精选</label>
+        <div class="sidebar-note"><span>每张图，都有来处。</span><p>图片保留原始信息与出处。收录数量持续更新，不代表完整论文全集。</p><button class="text-button" data-view="about">查看来源与收录方式</button></div>
+      </aside>
+      <div class="results-area">
+        <div class="search-wrap"><span aria-hidden="true">⌕</span><label class="sr-only" for="search">搜索论文标题、图注、作者或标签</label><input id="search" type="search" placeholder="搜索论文、图注、作者或标签…" autocomplete="off"><kbd>/</kbd></div>
+        <div class="results-toolbar"><div class="tabs" aria-label="图表类型"><button data-kind="" class="selected">全部图表</button><button data-kind="framework">框架图</button><button data-kind="experiment">实验图</button></div><label class="sort-label">排序<select id="sort"><option value="new">最近收录</option><option value="year">发表年份</option><option value="title">论文标题</option></select></label></div>
+        <div class="result-summary"><p id="result-count" role="status"></p><button id="export" class="text-button" hidden>导出收藏清单</button></div>
+        <div id="results" tabindex="-1"></div><button id="more" class="button load-more" hidden>加载更多</button>
+      </div>
+    </section>
+    <section id="about" hidden></section>
+  </main>
+  <footer><div><strong>SE Figure Atlas</strong><p>为研究表达，积累可追溯的视觉参考。</p></div><p>论文及图表版权归原作者或权利人。<br>引用、使用图表前，请查阅对应授权。</p><a href="https://github.com/YangDeng-28/Paper/issues" target="_blank" rel="noopener noreferrer">补充图表 / 纠错 / 撤下请求</a></footer>
+  <dialog id="detail"><button id="close-detail" class="close-button" aria-label="关闭详情">×</button><div id="detail-content"></div></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="empty">请启用 JavaScript 浏览图库。也可在 GitHub 仓库 data 目录查看原始索引。</p></noscript>
+</body>
+</html>

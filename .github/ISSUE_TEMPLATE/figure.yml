@@ -1,0 +1,43 @@
+name: 推荐论文图表
+description: 提交 2025–2026 年软件工程 CCF A 类论文的框架图或实验图
+title: '[图表推荐] '
+body:
+  - type: input
+    id: paper
+    attributes:
+      label: 论文标题与 DOI / 正式发表链接
+    validations:
+      required: true
+  - type: input
+    id: venue
+    attributes:
+      label: 会议或期刊、正式发表年份与论文类型
+      placeholder: ICSE 2026，Research Track Full Paper
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 图表类型
+      options:
+        - 框架图
+        - 实验图
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: 图号、公开原文链接及版本
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: 值得参考的设计细节
+      description: 例如布局层级、配色、图例、子图组织或对比表达。
+    validations:
+      required: true
+  - type: input
+    id: rights
+    attributes:
+      label: 许可或公开展示依据链接（如有）
